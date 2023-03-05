@@ -89,7 +89,7 @@ class DOTADataset(CustomDataset):
                 gt_labels_ignore = []
                 gt_polygons_ignore = []
 
-                if os.path.getsize(ann_file) == 0 and self.filter_empty_gt:
+                if os.path.getsize(ann_file) == 0:
                     continue
 
                 with open(ann_file) as f:
@@ -149,8 +149,7 @@ class DOTADataset(CustomDataset):
         """Filter images without ground truths."""
         valid_inds = []
         for i, data_info in enumerate(self.data_infos):
-            if (not self.filter_empty_gt
-                    or data_info['ann']['labels'].size > 0):
+            if data_info['ann']['labels'].size > 0:
                 valid_inds.append(i)
         return valid_inds
 
@@ -332,6 +331,69 @@ class DOTADataset(CustomDataset):
                                                 submission_dir)
 
         return result_files, tmp_dir
+
+
+@ROTATED_DATASETS.register_module()
+class DOTAv15Dataset(DOTADataset):
+    """DOTA dataset for detection.
+
+        Args:
+            ann_file (str): Annotation file path.
+            pipeline (list[dict]): Processing pipeline.
+            version (str, optional): Angle representations. Defaults to 'oc'.
+            difficulty (bool, optional): The difficulty threshold of GT.
+        """
+    CLASSES = ('plane', 'baseball-diamond', 'bridge', 'ground-track-field',
+               'small-vehicle', 'large-vehicle', 'ship', 'tennis-court',
+               'basketball-court', 'storage-tank', 'soccer-ball-field',
+               'roundabout', 'harbor', 'swimming-pool', 'helicopter',
+               'container-crane')
+
+    PALETTE = [(165, 42, 42), (189, 183, 107), (0, 255, 0), (255, 0, 0),
+               (138, 43, 226), (255, 128, 0), (255, 0, 255), (0, 255, 255),
+               (255, 193, 193), (0, 51, 153), (255, 250, 205), (0, 139, 139),
+               (255, 255, 0), (147, 116, 116), (0, 0, 255), (220, 20, 60)]
+
+    def __init__(self,
+                 ann_file,
+                 pipeline,
+                 version='oc',
+                 difficulty=100,
+                 **kwargs):
+
+        super(DOTAv15Dataset, self).__init__(ann_file, pipeline, version, difficulty, **kwargs)
+
+
+@ROTATED_DATASETS.register_module()
+class DOTAv2Dataset(DOTADataset):
+    """DOTA dataset for detection.
+
+        Args:
+            ann_file (str): Annotation file path.
+            pipeline (list[dict]): Processing pipeline.
+            version (str, optional): Angle representations. Defaults to 'oc'.
+            difficulty (bool, optional): The difficulty threshold of GT.
+        """
+    CLASSES = ('plane', 'baseball-diamond', 'bridge', 'ground-track-field',
+               'small-vehicle', 'large-vehicle', 'ship', 'tennis-court',
+               'basketball-court', 'storage-tank', 'soccer-ball-field',
+               'roundabout', 'harbor', 'swimming-pool', 'helicopter',
+               'container-crane', 'airport', 'helipad')
+
+    PALETTE = [(165, 42, 42), (189, 183, 107), (0, 255, 0), (255, 0, 0),
+               (138, 43, 226), (255, 128, 0), (255, 0, 255), (0, 255, 255),
+               (255, 193, 193), (0, 51, 153), (255, 250, 205), (0, 139, 139),
+               (255, 255, 0), (147, 116, 116), (0, 0, 255), (220, 20, 60),
+               (119, 11, 32), (0, 0, 142)]
+
+    def __init__(self,
+                 ann_file,
+                 pipeline,
+                 version='oc',
+                 difficulty=100,
+                 **kwargs):
+
+        super(DOTAv2Dataset, self).__init__(ann_file, pipeline, version, difficulty, **kwargs)
 
 
 def _merge_func(info, CLASSES, iou_thr):
