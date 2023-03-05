@@ -16,7 +16,7 @@
                 "--nproc_per_node=2",
                 "--nnodes=1",
                 "./tools/train.py",
-                "configs/rotated_dab_detr/rotated_dab_detr_r50_2x2_dota_oc.py",
+                "configs/h2rbox/h2rbox_r50_fpn_1x_dota_le90.py",
                 "--launcher=pytorch",
                 "--work-dir=./output"
             ],

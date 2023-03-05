@@ -122,3 +122,6 @@ tmp
 
 # custom
 mmrotate/.mim
+
+# vscode configuration files
+.vscode/
