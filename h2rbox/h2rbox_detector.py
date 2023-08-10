@@ -93,6 +93,20 @@ class H2RBox(RotatedSingleStageDetector):
         for idx, m in enumerate(img_metas):
             m['crop_size'] = self.crop_size
             m['visualize_imgs'] = (img1[idx], img2[idx])
+        # from mmrotate.core import imshow_det_rbboxes
+        # import numpy as np
+        # for idx, (img_meta, gt_bbox) in enumerate(zip(img_metas, gt_bboxes)):
+        #     _img1, _img2 = img_meta['visualize_imgs']
+        #     _img1 = _img1.permute(1, 2, 0).detach().cpu().numpy()
+        #     _img1 = (_img1 * np.array([58.395, 57.12, 57.375]) + np.array(
+        #             [123.675, 116.28, 103.53])).clip(0, 255).astype(
+        #             np.uint8)
+        #     _img2 = _img2.permute(1, 2, 0).detach().cpu().numpy()
+        #     _img2 = (_img2 * np.array([58.395, 57.12, 57.375]) + np.array(
+        #             [123.675, 116.28, 103.53])).clip(0, 255).astype(
+        #             np.uint8)
+        #     imshow_det_rbboxes(_img1, gt_bbox.detach().cpu().numpy(), labels=np.arange(len(gt_bbox)), out_file='/home/Guru/Workspace/img0_' + f'{idx}' + '.png')
+        #     imshow_det_rbboxes(_img2, gt_bbox.detach().cpu().numpy(), labels=np.arange(len(gt_bbox)), out_file='/home/Guru/Workspace/img1_' + f'{idx}' + '.png')
         losses = self.bbox_head.forward_train(x, x_aug, rot, img_metas,
                                               gt_bboxes, gt_labels,
                                               gt_bboxes_ignore)

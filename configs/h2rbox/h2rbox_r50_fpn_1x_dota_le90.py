@@ -102,7 +102,8 @@ test_pipeline = [
         ])
 ]
 
-data_root = '/data/nas/dataset_share/DOTA/split_ss_dota1_0/'
+# data_root = '/data/nas/dataset_share/DOTA/split_ss_dota1_0/'
+data_root = '/media/titan/G/Guru/data/DOTA-v1.0/split_1024_dota1_0/'
 data = dict(
     train=dict(type='DOTAWSOODDataset', pipeline=train_pipeline,
                ann_file=data_root + 'trainval/annfiles/',

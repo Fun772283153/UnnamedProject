@@ -89,7 +89,7 @@ class H2RBoxHead(RotatedFCOSHead):
                                          init_cfg=init_cfg,
                                          **kwargs)
         self.loss_bbox_aug = build_loss(loss_bbox_aug)
-        if self.seprate_angle:
+        if self.separate_angle:
             self.loss_angle_aug = build_loss(loss_angle_aug)
         self.rotation_agnostic_classes = rotation_agnostic_classes
         assert reassigner in ['one2one', 'many2one']
@@ -271,7 +271,7 @@ class H2RBoxHead(RotatedFCOSHead):
                 pos_bbox_preds_aug = flatten_bbox_preds_aug[pos_inds_aug]
                 pos_angle_preds_aug = flatten_angle_preds_aug[pos_inds_aug]
                 pos_points_aug = flatten_points[pos_inds_aug]
-            if self.seprate_angle:
+            if self.separate_angle:
                 bbox_coder = self.h_bbox_coder
             else:
                 bbox_coder = self.bbox_coder
@@ -301,7 +301,7 @@ class H2RBoxHead(RotatedFCOSHead):
                     weight=pos_centerness_targets,
                     avg_factor=centerness_denorm)
 
-                if self.seprate_angle:
+                if self.separate_angle:
                     loss_angle = self.loss_angle(
                         pos_angle_preds, pos_angle_targets, avg_factor=num_pos)
 
@@ -400,16 +400,16 @@ class H2RBoxHead(RotatedFCOSHead):
                     weight=pos_centerness_targets_aug,
                     avg_factor=centerness_denorm_aug)
 
-                if self.seprate_angle:
+                if self.separate_angle:
                     loss_angle_aug = self.loss_angle_aug(
                         pos_angle_preds_aug, pos_angle_targets_aug,
                         avg_factor=num_pos)
             else:
                 loss_bbox_aug = pos_bbox_preds[[]].sum()
-                if self.seprate_angle:
+                if self.separate_angle:
                     loss_angle_aug = pos_bbox_preds[[]].sum()
 
-            # if self.seprate_angle:
+            # if self.separate_angle:
             #     loss_angle = self.loss_angle(
             #         pos_angle_preds, pos_angle_targets, avg_factor=num_pos)
             loss_centerness = self.loss_centerness(
@@ -418,11 +418,11 @@ class H2RBoxHead(RotatedFCOSHead):
             loss_bbox = pos_bbox_preds.sum()
             loss_bbox_aug = pos_bbox_preds.sum()
             loss_centerness = pos_centerness.sum()
-            if self.seprate_angle:
+            if self.separate_angle:
                 loss_angle = pos_angle_preds.sum()
                 loss_angle_aug = pos_angle_preds.sum()
 
-        if self.seprate_angle:
+        if self.separate_angle:
             return dict(
                 loss_cls=loss_cls,
                 loss_bbox=loss_bbox,
